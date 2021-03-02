@@ -25,7 +25,7 @@ public class Rabbit extends Animal
     private static final Random rand = Randomizer.getRandom();
     
     // Individual characteristics (instance fields).
-    private static final boolean isMale = new Random().nextBoolean();
+    private final boolean isMale = new Random().nextBoolean();
     // The rabbit's age.
     private int age;
 
