@@ -68,11 +68,10 @@ public class Fox extends Animal
         incrementAge();
         incrementHunger();
         if(isAlive()) {
-            Location newLocation = findMates();
             
             giveBirth(newFoxes);            
             // Move towards a source of food if found.
-            newLocation = findFood();
+            Location newLocation = findFood();
             if(newLocation == null) { 
                 // No food found - try to move to a free location.
                 newLocation = getField().freeAdjacentLocation(getLocation());
@@ -134,7 +133,7 @@ public class Fox extends Animal
         }
         return null;
     }
-    private Location findMates()
+    private boolean findMates()
     {
         Field field = getField();
         List<Location> adjacent = field.adjacentLocations(getLocation());
@@ -145,12 +144,12 @@ public class Fox extends Animal
             if(animal instanceof Fox) {
                 Fox fox = (Fox) animal;
                 if(fox.isMale^this.isMale) { 
-                    System.out.println("sdhjfvgsgdfvghsvdf");
-                    return where;
+                    
+                    return true;
                 }
             }
         }
-        return null;
+        return false;
     }    
     /**
      * Check whether or not this fox is to give birth at this step.
@@ -161,13 +160,15 @@ public class Fox extends Animal
     {
         // New foxes are born into adjacent locations.
         // Get a list of adjacent free locations.
-        Field field = getField();
-        List<Location> free = field.getFreeAdjacentLocations(getLocation());
-        int births = breed();
-        for(int b = 0; b < births && free.size() > 0; b++) {
-            Location loc = free.remove(0);
-            Fox young = new Fox(false, field, loc);
-            newFoxes.add(young);
+        if (findMates()){
+            Field field = getField();
+            List<Location> free = field.getFreeAdjacentLocations(getLocation());
+            int births = breed();
+            for(int b = 0; b < births && free.size() > 0; b++) {
+                Location loc = free.remove(0);
+                Fox young = new Fox(false, field, loc);
+                newFoxes.add(young);
+            }
         }
     }
         

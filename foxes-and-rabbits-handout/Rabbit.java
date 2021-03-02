@@ -86,7 +86,7 @@ public class Rabbit extends Animal
      * @param newRabbits A list to return newly born rabbits.
      */
     
-    private Location findMates()
+    private boolean findMates()
     {
         Field field = getField();
         List<Location> adjacent = field.adjacentLocations(getLocation());
@@ -97,27 +97,28 @@ public class Rabbit extends Animal
             if(animal instanceof Rabbit) {
                 Rabbit rabbit = (Rabbit) animal;
                 if(rabbit.isMale^this.isMale) { 
-                    System.out.println("sdhjfvgsgdfvghsvdf");
-                    return where;
+                    return true;
                 }
             }
         }
-        return null;
+        return false;
     }
     
     private void giveBirth(List<Animal> newRabbits)
     {
         // New rabbits are born into adjacent locations.
         // Get a list of adjacent free locations.
-        Field field = getField();
-        List<Location> free = field.getFreeAdjacentLocations(getLocation());
-        int births = breed();
-        for(int b = 0; b < births && free.size() > 0; b++) {
-            Location loc = free.remove(0);
-            Rabbit young = new Rabbit(false, field, loc);
-            newRabbits.add(young);
+        if (findMates()){
+            Field field = getField();
+            List<Location> free = field.getFreeAdjacentLocations(getLocation());
+            int births = breed();
+            for(int b = 0; b < births && free.size() > 0; b++) {
+                Location loc = free.remove(0);
+                Rabbit young = new Rabbit(false, field, loc);
+                newRabbits.add(young);
+            }
         }
-    }
+   }
         
     /**
      * Generate a number representing the number of births,
